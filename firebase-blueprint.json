@@ -1,0 +1,38 @@
+{
+  "entities": {
+    "Session": {
+      "title": "Session",
+      "description": "SOS session state",
+      "type": "object",
+      "properties": {
+        "sosActive": { "type": "boolean" },
+        "updatedAt": { "type": "string", "format": "date-time" },
+        "updatedBy": { "type": "string" },
+        "lastActiveAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["sosActive", "updatedAt", "updatedBy"]
+    },
+    "Message": {
+      "title": "Message",
+      "description": "A message sent by the patient",
+      "type": "object",
+      "properties": {
+        "text": { "type": "string" },
+        "type": { "type": "string", "enum": ["phrase", "keyboard", "sos"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "createdBy": { "type": "string" }
+      },
+      "required": ["text", "type", "createdAt", "createdBy"]
+    }
+  },
+  "firestore": {
+    "sessions/{sessionId}": {
+      "schema": { "$ref": "#/entities/Session" },
+      "description": "Stores the active SOS state for a given session."
+    },
+    "sessions/{sessionId}/messages/{messageId}": {
+      "schema": { "$ref": "#/entities/Message" },
+      "description": "Stores the messages sent by the patient in a session."
+    }
+  }
+}

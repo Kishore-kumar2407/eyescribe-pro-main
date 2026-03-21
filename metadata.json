@@ -1,0 +1,5 @@
+{
+  "name": "EyeScribe Pro",
+  "description": "A medical assistive technology for patients with total paralysis, allowing communication via gaze tracking.",
+  "requestFramePermissions": ["camera"]
+}
