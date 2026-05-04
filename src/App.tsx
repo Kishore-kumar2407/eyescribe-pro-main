@@ -935,14 +935,16 @@ Rules:
     const lines = label.split('\n');
     const dwellTime = getDwellTime(id, sensitivity);
     
+    const handleTouchOrClick = (e: React.MouseEvent | React.TouchEvent) => {
+      e.preventDefault();
+      triggerAction(id);
+    };
+    
     return (
       <motion.div 
-        onClick={() => {
-          if (mouseFallback) {
-            triggerAction(id);
-          }
-        }}
-        className={`relative flex flex-col items-center justify-center border-4 transition-colors duration-150 overflow-hidden shadow-lg ${isActive ? 'bg-zinc-800 border-emerald-500 shadow-emerald-500/20' : 'bg-zinc-900 border-zinc-800'} ${className} ${mouseFallback ? 'cursor-pointer hover:bg-zinc-800' : ''}`}
+        onClick={handleTouchOrClick}
+        onTouchStart={handleTouchOrClick}
+        className={`relative flex flex-col items-center justify-center border-4 transition-colors duration-150 overflow-hidden shadow-lg cursor-pointer touch-none ${isActive ? 'bg-zinc-800 border-emerald-500 shadow-emerald-500/20' : 'bg-zinc-900 border-zinc-800 hover:bg-zinc-800'} ${className}`}
         animate={{ scale: isActive ? 1.02 : 1 }}
         transition={{ duration: 0.2 }}
       >
@@ -1335,7 +1337,12 @@ Rules:
             setRole(null);
             localStorage.removeItem('appRole');
           }}
-          className="flex items-center gap-1 sm:gap-2 px-3 py-2 bg-zinc-800/80 hover:bg-zinc-700 text-zinc-300 hover:text-white rounded-xl transition-colors border border-zinc-700 text-[10px] sm:text-xs font-bold uppercase tracking-wider"
+          onTouchStart={(e) => {
+            e.preventDefault();
+            setRole(null);
+            localStorage.removeItem('appRole');
+          }}
+          className="flex items-center gap-1 sm:gap-2 px-3 py-2 bg-zinc-800/80 hover:bg-zinc-700 text-zinc-300 hover:text-white rounded-xl transition-colors border border-zinc-700 text-[10px] sm:text-xs font-bold uppercase tracking-wider cursor-pointer touch-none active:scale-95"
           title="Switch Role"
         >
           <UserIcon className="w-3 h-3 sm:w-4 sm:h-4" />
@@ -1347,7 +1354,11 @@ Rules:
           onClick={() => {
             setShowSetup(true);
           }}
-          className="flex items-center gap-1 sm:gap-2 px-3 py-2 bg-zinc-800/80 hover:bg-zinc-700 text-zinc-300 hover:text-white rounded-xl transition-colors border border-zinc-700 text-[10px] sm:text-xs font-bold uppercase tracking-wider"
+          onTouchStart={(e) => {
+            e.preventDefault();
+            setShowSetup(true);
+          }}
+          className="flex items-center gap-1 sm:gap-2 px-3 py-2 bg-zinc-800/80 hover:bg-zinc-700 text-zinc-300 hover:text-white rounded-xl transition-colors border border-zinc-700 text-[10px] sm:text-xs font-bold uppercase tracking-wider cursor-pointer touch-none active:scale-95"
           title="Setup Helper"
         >
           <MonitorSmartphone className="w-3 h-3 sm:w-4 sm:h-4" />
@@ -1360,7 +1371,12 @@ Rules:
             setTempPhrases(customPhrases);
             setIsEditingPhrases(true);
           }}
-          className="flex items-center gap-1 sm:gap-2 px-3 py-2 bg-zinc-800/80 hover:bg-zinc-700 text-zinc-300 hover:text-white rounded-xl transition-colors border border-zinc-700 text-[10px] sm:text-xs font-bold uppercase tracking-wider"
+          onTouchStart={(e) => {
+            e.preventDefault();
+            setTempPhrases(customPhrases);
+            setIsEditingPhrases(true);
+          }}
+          className="flex items-center gap-1 sm:gap-2 px-3 py-2 bg-zinc-800/80 hover:bg-zinc-700 text-zinc-300 hover:text-white rounded-xl transition-colors border border-zinc-700 text-[10px] sm:text-xs font-bold uppercase tracking-wider cursor-pointer touch-none active:scale-95"
           title="Edit Quick Phrases"
         >
           <Edit className="w-3 h-3 sm:w-4 sm:h-4" />
@@ -1389,7 +1405,11 @@ Rules:
             </div>
             <button 
               onClick={() => setSnoozeUntil(null)}
-              className="px-2 py-1 bg-red-500/20 text-red-400 rounded-lg hover:bg-red-500/30 transition-colors text-[10px] sm:text-xs font-bold uppercase tracking-wider ml-2"
+              onTouchStart={(e) => {
+                e.preventDefault();
+                setSnoozeUntil(null);
+              }}
+              className="px-2 py-1 bg-red-500/20 text-red-400 rounded-lg hover:bg-red-500/30 transition-colors text-[10px] sm:text-xs font-bold uppercase tracking-wider ml-2 cursor-pointer touch-none active:scale-95"
             >
               Cancel
             </button>
@@ -1413,7 +1433,12 @@ Rules:
                 setSnoozeUntil(Date.now() + snoozeDuration * 60000);
                 setNow(Date.now());
               }}
-              className="flex items-center gap-1 sm:gap-2 px-2 py-1 bg-amber-500/20 text-amber-400 rounded-lg hover:bg-amber-500/30 transition-colors text-[10px] sm:text-xs font-bold uppercase tracking-wider ml-1"
+              onTouchStart={(e) => {
+                e.preventDefault();
+                setSnoozeUntil(Date.now() + snoozeDuration * 60000);
+                setNow(Date.now());
+              }}
+              className="flex items-center gap-1 sm:gap-2 px-2 py-1 bg-amber-500/20 text-amber-400 rounded-lg hover:bg-amber-500/30 transition-colors text-[10px] sm:text-xs font-bold uppercase tracking-wider ml-1 cursor-pointer touch-none active:scale-95"
             >
               <BellOff className="w-3 h-3 sm:w-4 sm:h-4" />
               <span className="hidden sm:inline">Snooze SOS</span>
@@ -1444,7 +1469,7 @@ Rules:
             whileTap={{ scale: 0.95 }}
             href="/eyescribe_pro.py" 
             download 
-            className="flex items-center justify-center gap-2 bg-zinc-800 hover:bg-zinc-700 px-3 py-2 sm:px-5 sm:py-3 rounded-xl text-xs sm:text-sm font-bold transition-colors border border-zinc-700 shadow-lg text-zinc-300 hover:text-white flex-1 sm:flex-none"
+            className="flex items-center justify-center gap-2 bg-zinc-800 hover:bg-zinc-700 px-3 py-2 sm:px-5 sm:py-3 rounded-xl text-xs sm:text-sm font-bold transition-colors border border-zinc-700 shadow-lg text-zinc-300 hover:text-white flex-1 sm:flex-none cursor-pointer"
           >
             <Download className="w-4 h-4 sm:w-5 sm:h-5" />
             <span className="hidden xs:inline">Download Script</span>
@@ -1472,7 +1497,40 @@ Rules:
             className="flex-1 flex flex-col bg-[#0a0a0a] relative overflow-hidden"
           >
             {/* Top Bar */}
-            <div className="h-16 sm:h-20 flex items-center justify-center border-b border-zinc-800 bg-[#121212] relative overflow-hidden">
+            <div 
+              className="h-16 sm:h-20 flex items-center justify-center border-b border-zinc-800 bg-[#121212] relative overflow-hidden cursor-pointer hover:bg-zinc-900 transition-colors touch-none"
+              onClick={() => {
+                if (appState === 'QUICK_PHRASES') {
+                  if (activePhraseList.length === customPhrases.length) {
+                    setAppState('MAIN_MENU');
+                  } else {
+                    setActivePhraseList(customPhrases);
+                  }
+                } else if (appState === 'BINARY_KEYBOARD') {
+                  if (activeCharList.length === ALPHABET.length) {
+                    setAppState('MAIN_MENU');
+                  } else {
+                    setActiveCharList(ALPHABET);
+                  }
+                }
+              }}
+              onTouchStart={(e) => {
+                e.preventDefault();
+                if (appState === 'QUICK_PHRASES') {
+                  if (activePhraseList.length === customPhrases.length) {
+                    setAppState('MAIN_MENU');
+                  } else {
+                    setActivePhraseList(customPhrases);
+                  }
+                } else if (appState === 'BINARY_KEYBOARD') {
+                  if (activeCharList.length === ALPHABET.length) {
+                    setAppState('MAIN_MENU');
+                  } else {
+                    setActiveCharList(ALPHABET);
+                  }
+                }
+              }}
+            >
               <motion.div 
                 className="absolute top-0 left-0 h-full bg-emerald-500/30 pointer-events-none z-0 backdrop-blur-sm"
                 animate={{ width: zone === 'UP' ? '100%' : '0%' }}
@@ -1499,33 +1557,67 @@ Rules:
             <div className="absolute left-1/2 top-0 bottom-0 w-1 bg-zinc-800 -translate-x-1/2 z-10" />
 
             {/* Left Column */}
-            <div className={`flex-1 flex flex-col p-2 sm:p-6 transition-colors relative overflow-hidden ${zone === 'LEFT' ? 'bg-zinc-900/50' : ''}`}>
+            <div className={`flex-1 flex flex-col p-1 sm:p-3 transition-colors relative overflow-hidden ${zone === 'LEFT' ? 'bg-zinc-900/50' : ''}`}>
               <motion.div 
                 className="absolute top-0 left-0 h-full bg-emerald-500/20 pointer-events-none z-0 backdrop-blur-sm"
                 animate={{ width: zone === 'LEFT' ? '100%' : '0%' }}
                 transition={{ duration: zone === 'LEFT' ? getDwellTime('LEFT', sensitivity) / 1000 : 0, ease: "linear" }}
               />
               <div className="relative z-10 flex flex-col h-full">
-                <div className="flex items-center gap-2 sm:gap-4 mb-4 sm:mb-8">
-                  <ArrowLeft className="w-6 h-6 sm:w-8 sm:h-8 text-emerald-500" />
-                  <div className="text-zinc-400 text-lg sm:text-2xl font-black uppercase tracking-[0.2em]">Look left</div>
+                <div className="flex items-center gap-1 sm:gap-2 mb-2 sm:mb-3">
+                  <ArrowLeft className="w-4 h-4 sm:w-6 sm:h-6 text-emerald-500" />
+                  <div className="text-zinc-400 text-xs sm:text-lg font-black uppercase tracking-[0.2em]">Look left</div>
                 </div>
                 {appState === 'QUICK_PHRASES' ? (
-                  <div className="flex-1 flex flex-col gap-2 sm:gap-3 overflow-y-auto pr-1 pb-2">
+                  <div className="flex-1 flex flex-col gap-1 sm:gap-2 overflow-hidden">
                     {activePhraseList.slice(0, Math.ceil(activePhraseList.length / 2)).map((phrase, i) => {
                       const { emoji, text } = parsePhrase(phrase);
                       return (
-                        <div key={i} className="bg-[#1a1a1a] rounded-xl sm:rounded-2xl p-3 sm:p-5 flex items-center gap-3 sm:gap-5 shadow-lg border border-zinc-800 shrink-0">
-                          <span className="text-3xl sm:text-5xl drop-shadow-md">{emoji}</span>
-                          <span className="text-lg sm:text-2xl text-white font-bold truncate">{text}</span>
+                        <div 
+                          key={i} 
+                          onClick={() => {
+                            const parsedText = parsePhrase(phrase).text;
+                            logMessage(parsedText, 'phrase');
+                            setSelectedPhrase(parsedText);
+                            setAppState('MAIN_MENU');
+                            setTimeout(() => {
+                              setSelectedPhrase(null);
+                            }, 3000);
+                          }}
+                          onTouchStart={(e) => {
+                            e.preventDefault();
+                            const parsedText = parsePhrase(phrase).text;
+                            logMessage(parsedText, 'phrase');
+                            setSelectedPhrase(parsedText);
+                            setAppState('MAIN_MENU');
+                            setTimeout(() => {
+                              setSelectedPhrase(null);
+                            }, 3000);
+                          }}
+                          className="bg-[#1a1a1a] rounded-lg sm:rounded-xl p-2 sm:p-3 flex items-center gap-2 sm:gap-3 shadow-lg border border-zinc-800 shrink-0 cursor-pointer hover:bg-zinc-800 hover:border-emerald-500 transition-all active:scale-95 touch-none"
+                        >
+                          <span className="text-2xl sm:text-3xl drop-shadow-md shrink-0">{emoji}</span>
+                          <span className="text-sm sm:text-base text-white font-bold truncate">{text}</span>
                         </div>
                       );
                     })}
                   </div>
                 ) : (
-                  <div className="flex-1 grid grid-cols-4 sm:grid-cols-3 md:grid-cols-4 gap-2 sm:gap-4 content-start justify-items-center overflow-y-auto pr-1 pb-2">
+                  <div className="flex-1 grid grid-cols-5 sm:grid-cols-4 md:grid-cols-5 gap-1 sm:gap-2 content-start justify-items-center overflow-hidden">
                     {activeCharList.slice(0, Math.ceil(activeCharList.length / 2)).map((char, i) => (
-                      <div key={i} className="bg-[#1a1a1a] rounded-lg sm:rounded-2xl w-full aspect-square max-w-[3rem] sm:max-w-[4rem] md:max-w-[5rem] flex items-center justify-center shadow-lg border border-zinc-800 text-lg sm:text-3xl md:text-4xl font-black text-white">
+                      <div 
+                        key={i} 
+                        onClick={() => {
+                          setText(prev => prev + (char === '_' ? ' ' : char));
+                          setActiveCharList(ALPHABET);
+                        }}
+                        onTouchStart={(e) => {
+                          e.preventDefault();
+                          setText(prev => prev + (char === '_' ? ' ' : char));
+                          setActiveCharList(ALPHABET);
+                        }}
+                        className="bg-[#1a1a1a] rounded-lg sm:rounded-lg w-full aspect-square max-w-[2.5rem] sm:max-w-[3rem] md:max-w-[3.5rem] flex items-center justify-center shadow-lg border border-zinc-800 text-base sm:text-xl md:text-2xl font-black text-white cursor-pointer hover:bg-zinc-800 hover:border-emerald-500 transition-all active:scale-95 touch-none"
+                      >
                         {char === '_' ? '␣' : char}
                       </div>
                     ))}
@@ -1535,33 +1627,67 @@ Rules:
             </div>
 
             {/* Right Column */}
-            <div className={`flex-1 flex flex-col p-2 sm:p-6 transition-colors relative overflow-hidden ${zone === 'RIGHT' ? 'bg-zinc-900/50' : ''}`}>
+            <div className={`flex-1 flex flex-col p-1 sm:p-3 transition-colors relative overflow-hidden ${zone === 'RIGHT' ? 'bg-zinc-900/50' : ''}`}>
               <motion.div 
                 className="absolute top-0 right-0 h-full bg-emerald-500/20 pointer-events-none z-0 backdrop-blur-sm"
                 animate={{ width: zone === 'RIGHT' ? '100%' : '0%' }}
                 transition={{ duration: zone === 'RIGHT' ? getDwellTime('RIGHT', sensitivity) / 1000 : 0, ease: "linear" }}
               />
               <div className="relative z-10 flex flex-col h-full">
-                <div className="flex items-center justify-end gap-2 sm:gap-4 mb-4 sm:mb-8">
-                  <div className="text-zinc-400 text-lg sm:text-2xl font-black uppercase tracking-[0.2em]">Look right</div>
-                  <ArrowRight className="w-6 h-6 sm:w-8 sm:h-8 text-emerald-500" />
+                <div className="flex items-center justify-end gap-1 sm:gap-2 mb-2 sm:mb-3">
+                  <div className="text-zinc-400 text-xs sm:text-lg font-black uppercase tracking-[0.2em]">Look right</div>
+                  <ArrowRight className="w-4 h-4 sm:w-6 sm:h-6 text-emerald-500" />
                 </div>
                 {appState === 'QUICK_PHRASES' ? (
-                  <div className="flex-1 flex flex-col gap-2 sm:gap-3 overflow-y-auto pr-1 pb-2">
+                  <div className="flex-1 flex flex-col gap-1 sm:gap-2 overflow-hidden">
                     {activePhraseList.slice(Math.ceil(activePhraseList.length / 2)).map((phrase, i) => {
                       const { emoji, text } = parsePhrase(phrase);
                       return (
-                        <div key={i} className="bg-[#1a1a1a] rounded-xl sm:rounded-2xl p-3 sm:p-5 flex items-center gap-3 sm:gap-5 shadow-lg border border-zinc-800 shrink-0">
-                          <span className="text-3xl sm:text-5xl drop-shadow-md">{emoji}</span>
-                          <span className="text-lg sm:text-2xl text-white font-bold truncate">{text}</span>
+                        <div 
+                          key={i} 
+                          onClick={() => {
+                            const parsedText = parsePhrase(phrase).text;
+                            logMessage(parsedText, 'phrase');
+                            setSelectedPhrase(parsedText);
+                            setAppState('MAIN_MENU');
+                            setTimeout(() => {
+                              setSelectedPhrase(null);
+                            }, 3000);
+                          }}
+                          onTouchStart={(e) => {
+                            e.preventDefault();
+                            const parsedText = parsePhrase(phrase).text;
+                            logMessage(parsedText, 'phrase');
+                            setSelectedPhrase(parsedText);
+                            setAppState('MAIN_MENU');
+                            setTimeout(() => {
+                              setSelectedPhrase(null);
+                            }, 3000);
+                          }}
+                          className="bg-[#1a1a1a] rounded-lg sm:rounded-xl p-2 sm:p-3 flex items-center gap-2 sm:gap-3 shadow-lg border border-zinc-800 shrink-0 cursor-pointer hover:bg-zinc-800 hover:border-emerald-500 transition-all active:scale-95 touch-none"
+                        >
+                          <span className="text-2xl sm:text-3xl drop-shadow-md shrink-0">{emoji}</span>
+                          <span className="text-sm sm:text-base text-white font-bold truncate">{text}</span>
                         </div>
                       );
                     })}
                   </div>
                 ) : (
-                  <div className="flex-1 grid grid-cols-4 sm:grid-cols-3 md:grid-cols-4 gap-2 sm:gap-4 content-start justify-items-center overflow-y-auto pr-1 pb-2">
+                  <div className="flex-1 grid grid-cols-5 sm:grid-cols-4 md:grid-cols-5 gap-1 sm:gap-2 content-start justify-items-center overflow-hidden">
                     {activeCharList.slice(Math.ceil(activeCharList.length / 2)).map((char, i) => (
-                      <div key={i} className="bg-[#1a1a1a] rounded-lg sm:rounded-2xl w-full aspect-square max-w-[3rem] sm:max-w-[4rem] md:max-w-[5rem] flex items-center justify-center shadow-lg border border-zinc-800 text-lg sm:text-3xl md:text-4xl font-black text-white">
+                      <div 
+                        key={i} 
+                        onClick={() => {
+                          setText(prev => prev + (char === '_' ? ' ' : char));
+                          setActiveCharList(ALPHABET);
+                        }}
+                        onTouchStart={(e) => {
+                          e.preventDefault();
+                          setText(prev => prev + (char === '_' ? ' ' : char));
+                          setActiveCharList(ALPHABET);
+                        }}
+                        className="bg-[#1a1a1a] rounded-lg sm:rounded-lg w-full aspect-square max-w-[2.5rem] sm:max-w-[3rem] md:max-w-[3.5rem] flex items-center justify-center shadow-lg border border-zinc-800 text-base sm:text-xl md:text-2xl font-black text-white cursor-pointer hover:bg-zinc-800 hover:border-emerald-500 transition-all active:scale-95 touch-none"
+                      >
                         {char === '_' ? '␣' : char}
                       </div>
                     ))}

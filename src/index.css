@@ -9,6 +9,38 @@
 @layer base {
   body {
     @apply bg-[#0a0a0a] text-white antialiased selection:bg-emerald-500/30;
+    /* Optimize touch interactions */
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+  }
+
+  /* Touch-friendly interactive elements */
+  button,
+  [role="button"],
+  a,
+  input[type="button"],
+  input[type="submit"],
+  input[type="reset"] {
+    /* Ensure minimum touch target size (48x48px according to WCAG) */
+    min-height: 48px;
+    min-width: 48px;
+    /* Better feedback on touch */
+    cursor: pointer;
+    -webkit-user-select: none;
+    user-select: none;
+    /* Prevent text selection on long press */
+    -webkit-touch-callout: none;
+  }
+
+  /* Icon buttons are more touch friendly */
+  svg {
+    pointer-events: auto;
+  }
+
+  /* Improve touch response time */
+  * {
+    -webkit-tap-highlight-color: transparent;
   }
 }
 
@@ -25,4 +57,84 @@
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
+}
+
+/* ===== TOUCH & CLICK INTERACTION STYLES ===== */
+
+/* Active/pressed state for touch devices */
+@media (hover: none) and (pointer: coarse) {
+  button:active,
+  [role="button"]:active,
+  a:active,
+  input[type="button"]:active,
+  input[type="submit"]:active {
+    opacity: 0.8;
+    transform: scale(0.98);
+  }
+}
+
+/* Hover state for devices with mouse/pointer */
+@media (hover: hover) and (pointer: fine) {
+  button:hover,
+  [role="button"]:hover,
+  a:hover,
+  input[type="button"]:hover,
+  input[type="submit"]:hover {
+    opacity: 0.9;
+  }
+}
+
+/* Touch feedback - visual ripple effect for touch interactions */
+@supports (backdrop-filter: blur(1px)) {
+  button::before,
+  [role="button"]::before,
+  a::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
+    border-radius: inherit;
+    transform: translate(-50%, -50%) scale(0);
+    transition: transform 0.4s ease-out;
+    pointer-events: none;
+  }
+
+  button:active::before,
+  [role="button"]:active::before,
+  a:active::before {
+    transform: translate(-50%, -50%) scale(2);
+  }
+}
+
+/* Enhanced touch target for icon buttons */
+.icon-button,
+button svg,
+[role="button"] svg {
+  min-width: 40px;
+  min-height: 40px;
+  padding: 8px;
+}
+
+/* Touch-friendly scrolling */
+.scrollable,
+[class*="overflow"] {
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
+/* Prevent zoom on double tap for input fields */
+input,
+textarea,
+select {
+  font-size: 16px;
+}
+
+/* Touch feedback for form elements */
+input:active,
+textarea:active,
+select:active {
+  outline: 2px solid rgba(30, 142, 62, 0.5);
 }
